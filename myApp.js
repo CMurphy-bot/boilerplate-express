@@ -23,6 +23,12 @@ app.get("/:word/echo", (req, res) => {
   res.json({echo: req.params.word});
 });
 
+app.get("/name", (req, res) => {
+  var firstname = req.query.first;
+  var lastname = req.query.last;
+  res.json({ name: `${firstname} ${lastname}`});
+});
+
 app.use("/public", express.static(__dirname +  "/public"));
 app.use(simpleLogger);
 
