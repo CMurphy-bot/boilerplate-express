@@ -2,6 +2,8 @@ let express = require('express');
 
 require("dotenv").config();
 
+var bodyParser = require("body-parser");
+
 let app = express();
 
 express[console.log("Hello World")];
@@ -14,13 +16,21 @@ function simpleLogger(req, res, next) {
   console.log(`${req.method} ${req.path} - ${req.ip}`);
   next();
 }
+
 function timeLogger(req, res, next) {
   req.time = new Date().toString();
   next();
 }
 
+app.use(bodyParser.urlencoded({ extended: false}));
+
 app.get("/:word/echo", (req, res) => {
   res.json({echo: req.params.word});
+});
+
+app.post("/name", function(req, res) {
+  var string = req.body.first + " " + req.body.last;
+  res.json({ name:string});
 });
 
 app.get("/name", (req, res) => {
@@ -30,6 +40,7 @@ app.get("/name", (req, res) => {
 });
 
 app.use("/public", express.static(__dirname +  "/public"));
+
 app.use(simpleLogger);
 
 app.get("/now", timeLogger, (req, res) => {
